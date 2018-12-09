@@ -46,7 +46,7 @@ contract('GoodAuctionTest', function(accounts) {
 			"be able to displace the highest bidder", async function() {
 				await notPoisoned.bid(args._smallAmount);
 				let cleanBalance = await notPoisoned.getBalance.call();
-				assert.isBelow(cleanBalance.valueOf(), args._bigAmount,
+				assert.isTrue((cleanBalance.valueOf() < args._bigAmount),
 					"some balance has been spent");
 				let anotherNotPoisoned = await NotPoisoned
 					.new({value: args._bigAmount});
@@ -57,7 +57,7 @@ contract('GoodAuctionTest', function(accounts) {
 				/* Optimized for Truffle, for now
 				 * Should be `.equal` but value is not sent back currently
 				 */
-				assert.isBelow(anotherCleanBalance.valueOf(), args._bigAmount,
+				assert.isTrue((anotherCleanBalance.valueOf() < args._bigAmount),
 					"some balance has been spent");
 				let highestBid = await good.getHighestBid.call();
 				let highestBidder = await good.getHighestBidder.call();
@@ -74,7 +74,7 @@ contract('GoodAuctionTest', function(accounts) {
 			"displace the highest bidder", async function() {
 				await notPoisoned.bid(args._smallAmount);
 				let cleanBalance = await notPoisoned.getBalance.call();
-				assert.isBelow(cleanBalance.valueOf(), args._bigAmount,
+				assert.isTrue((cleanBalance.valueOf() < args._bigAmount),
 					"some balance has been spent");
 				let anotherNotPoisoned = await NotPoisoned
 					.new({value: args._bigAmount});
@@ -83,12 +83,12 @@ contract('GoodAuctionTest', function(accounts) {
 				cleanBalance = await notPoisoned.getBalance.call();
 				let onContractCleanBalance = await good.getMyBalance.call(
 					{from: notPoisoned.address});
-				assert.isBelow(cleanBalance.valueOf(), args._bigAmount,
+				assert.isTrue((cleanBalance.valueOf() < args._bigAmount),
 					"no balance has been returned yet");
 				assert.equal(onContractCleanBalance.valueOf(), args._smallAmount,
 					"displaced funds stored in refunds mapping")
 				let anotherCleanBalance = await anotherNotPoisoned.getBalance.call();
-				assert.isBelow(anotherCleanBalance.valueOf(), args._bigAmount,
+				assert.isTrue((anotherCleanBalance.valueOf() < args._bigAmount),
 					"some balance has been spent");
 				let highestBid = await good.getHighestBid.call();
 				let highestBidder = await good.getHighestBidder.call();
