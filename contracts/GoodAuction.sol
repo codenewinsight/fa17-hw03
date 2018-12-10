@@ -15,7 +15,7 @@ contract GoodAuction is AuctionInterface {
 	 */
 	function bid() payable external returns(bool) {
 		//if new value is higher than the highest bid
-		if ((msg.value > highestBid)&& (0 != highestBid)){
+		if (msg.value > highestBid) {
 			  //Set up refund for the previous highest bid
 				refunds[highestBidder] = highestBid;
 
