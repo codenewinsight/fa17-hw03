@@ -46,7 +46,7 @@ contract('BadAuctionTest', function(accounts) {
 			"be able to displace the highest bidder", async function() {
 				await notPoisoned.bid(args._smallAmount);
 				let cleanBalance = await notPoisoned.getBalance.call();
-				assert.isTrue((cleanBalance.valueOf() < args._bigAmount),
+				assert.isTrue((cleanBalance.valueOf() < args._smallAmount),
 					"some balance has been spent");
 				let anotherNotPoisoned = await NotPoisoned
 					.new({value: args._bigAmount});
@@ -55,7 +55,7 @@ contract('BadAuctionTest', function(accounts) {
 				cleanBalance = await notPoisoned.getBalance.call();
 				let anotherCleanBalance = await anotherNotPoisoned.getBalance.call();
 				/* Optimized for Truffle, for now */
-				assert.equal(anotherCleanBalance.valueOf(), args._bigAmount,
+				assert.isTrue((anotherCleanBalance.valueOf() < args._smallAmount),
 					"some balance has been spent");
 				let highestBid = await bad.getHighestBid.call();
 				let highestBidder = await bad.getHighestBidder.call();
@@ -78,7 +78,7 @@ contract('BadAuctionTest', function(accounts) {
 				assert.equal(cleanBalance.valueOf(), args._bigAmount,
 					"some balance has been returned");
 				let anotherCleanBalance = await anotherNotPoisoned.getBalance.call();
-				assert.isBelow(anotherCleanBalance.valueOf(), args._bigAmount,
+				assert.isTrue((anotherCleanBalance.valueOf() < args._bigAmount),
 					"some balance has been spent");
 				let highestBid = await bad.getHighestBid.call();
 				let highestBidder = await bad.getHighestBidder.call();
@@ -126,7 +126,7 @@ contract('BadAuctionTest', function(accounts) {
 				let notPoisonedBalance = await notPoisoned.getBalance.call();
 				let highestBid = await bad.getHighestBid.call();
 				let highestBidder = await bad.getHighestBidder.call();
-				assert.isBelow(poisonedBalance.valueOf(), args._bigAmount,
+				assert.isTrue((poisonedBalance.valueOf() < args._bigAmount),
 					"some balance has been spent");
 				/* Optimized for Truffle, for now */
 				assert.equal(notPoisonedBalance.valueOf(), args._bigAmount,
